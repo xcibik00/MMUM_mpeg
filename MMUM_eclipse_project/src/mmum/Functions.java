@@ -107,5 +107,20 @@ public static Matrix upsize_matrix (int size, Matrix input_matrix) {
 		}
 		System.out.println();
 	}
+
+	// fce which compute SAD
+	public static double SAD(Matrix input_matrix_a, Matrix input_matrix_b) {
+		int height = input_matrix_a.getRowDimension();
+		int width = input_matrix_a.getColumnDimension();
+		double tmp = 0.0;
+		
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				tmp+= Math.abs(input_matrix_a.get(i, j) - input_matrix_b.get(i, j));
+			}
+		}
+		
+		return tmp;
+	}
 	
 }

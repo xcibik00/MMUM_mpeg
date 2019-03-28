@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane prefHeight="736.0" prefWidth="1145.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mmum.Process">
+<AnchorPane prefHeight="736.0" prefWidth="1145.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mmum.Process">
   <!-- TODO Add Nodes -->
   <children>
     <Label layoutX="298.0" layoutY="131.0" prefWidth="91.0" text="DOWNSAMPLE" textAlignment="CENTER" wrapText="false" />
@@ -65,5 +65,6 @@
       </AnchorPane>
       <Button layoutX="674.0" layoutY="63.0" mnemonicParsing="false" onAction="#transformAndQuantize" text="T+Q" />
       <Button layoutX="731.0" layoutY="63.0" mnemonicParsing="false" onAction="#iTransformAndIQuantize" text="iT+iQ" />
+      <Button layoutX="378.0" layoutY="269.0" mnemonicParsing="false" onAction="#DPCM_1" text="1. DPCM" />
   </children>
 </AnchorPane>

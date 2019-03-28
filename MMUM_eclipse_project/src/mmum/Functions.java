@@ -4,6 +4,8 @@
 
 package mmum;
 
+import java.util.LinkedList;
+
 import Jama.Matrix;
 
 public class Functions {
@@ -107,7 +109,7 @@ public static Matrix upsize_matrix (int size, Matrix input_matrix) {
 		}
 		System.out.println();
 	}
-
+	
 	// fce which compute SAD
 	public static double SAD(Matrix input_matrix_a, Matrix input_matrix_b) {
 		int height = input_matrix_a.getRowDimension();
@@ -121,6 +123,23 @@ public static Matrix upsize_matrix (int size, Matrix input_matrix) {
 		}
 		
 		return tmp;
+	}
+	
+	public static Matrix DPCM(Matrix input_matrix_a, Matrix input_matrix_b) {
+		int height = input_matrix_a.getRowDimension();
+		int width = input_matrix_a.getColumnDimension();
+		
+		Matrix tmp_matrix = new Matrix(height, width);
+		
+		double tmp_value = 0;
+		
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				tmp_value = (((input_matrix_a.get(i, j) + 255) - input_matrix_b.get(i, j)) / 2);
+				tmp_matrix.set(i, j, tmp_value); 
+			}
+		}
+		return tmp_matrix;
 	}
 	
 }

@@ -4,14 +4,19 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import Jama.Matrix;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import ij.ImagePlus;
 
 public class Process implements Initializable {
@@ -25,6 +30,7 @@ public class Process implements Initializable {
 	public static final int S422 = 8;
 	public static final int S420 = 9;
 	public static final int S411 = 10;
+	public int macroblock_size;
 	private int vzorkovani = S444;
 
 	private Matrix quantizationMatrix8Y;
@@ -38,6 +44,11 @@ public class Process implements Initializable {
 	private ColorTransform colorTransform_stvorec2;
 	private ColorTransform colorTransformOrig;
 
+	String block_size;
+	
+	@FXML
+	private ChoiceBox choice_box_n;
+	
 	@FXML
 	private Button redButton;
 	@FXML
@@ -52,6 +63,12 @@ public class Process implements Initializable {
 	private Button crButton;
 	@FXML
 	private Label psnrLabel;
+	@FXML
+	private Label sad_label1;
+	@FXML
+	private Label sad_label2;
+	@FXML
+	private Label sad_label3;
 	@FXML
 	private Label mseLabel;
 	@FXML
@@ -114,6 +131,33 @@ public class Process implements Initializable {
 		this.colorTransform.convertRgbToYcbcr();
 		imagePlus.setTitle("Original Image");
 		imagePlus.show("Original Image");
+		
+		choice_box_n.setItems(FXCollections.observableArrayList("2 x 2", "4 x 4", "8 x 8", "16 x 16"));
+		choice_box_n.getSelectionModel().select(3);
+		block_size = choice_box_n.getValue().toString();
+		macroblock_size = 16;
+		choice_box_n.setTooltip(new Tooltip("Vyber velkost bloku"));
+		choice_box_n.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+		      @Override
+		      public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+		    	  block_size = newValue;
+		    	  switch(block_size) {
+		    	  case "2 x 2":
+		    		  macroblock_size = 2;
+		    		  break;
+		    	  case "4 x 4":
+		    		  macroblock_size = 4;
+		    		  break;
+		    	  case "8 x 8":
+		    		  macroblock_size = 8;
+		    		  break;
+		    	  case "16 x 16":
+		    		  macroblock_size = 16;
+		    		  break;
+		    	  }
+		    	  System.out.println("Velkost bloku nastavena na: " + block_size);
+		      }
+		    });
 
 	}
 
@@ -128,11 +172,11 @@ public class Process implements Initializable {
 	
 	public void nactiOrigObraz_stvorceky() {
 		
-		this.imagePlus_stvorcek1 = new ImagePlus("img/test1.jpg");
+		this.imagePlus_stvorcek1 = new ImagePlus("img/pomaly.jpg");
 		this.colorTransform_stvorec1 = new ColorTransform(imagePlus_stvorcek1.getBufferedImage());
 		this.colorTransform_stvorec1.getRGB();
 		
-		this.imagePlus_stvorcek2 = new ImagePlus("img/test2.jpg");
+		this.imagePlus_stvorcek2 = new ImagePlus("img/pomaly2.jpg");
 		this.colorTransform_stvorec2 = new ColorTransform(imagePlus_stvorcek2.getBufferedImage());
 		this.colorTransform_stvorec2.getRGB();
 	}
@@ -597,7 +641,51 @@ public class Process implements Initializable {
 		
 	}
 	
+	public void FULL_s(ActionEvent event) {
+		
+		colorTransform.setY(Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getY(), macroblock_size));
+		getComponent(Y).show();
+		colorTransform.setcB(Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getcB(), macroblock_size));
+		getComponent(CB).show();
+		colorTransform.setcR(Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getcR(), macroblock_size));
+		getComponent(CR).show();
+		
+	}
 	
+	public void DPCM_2(ActionEvent event) {
+		
+		colorTransform.setY(Functions.DPCM(Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getY(), macroblock_size), colorTransform_stvorec1.getY()));
+		getComponent(Y).show();
+		colorTransform.setcB(Functions.DPCM(Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getcB(), macroblock_size), colorTransform_stvorec1.getcB()));
+		getComponent(CB).show();
+		colorTransform.setcR(Functions.DPCM(Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getcR(), macroblock_size), colorTransform_stvorec1.getcR()));
+		getComponent(CR).show();
+		
+	}
 
+	public void SAD_pred_po(ActionEvent event) {
+		
+		int height = colorTransform_stvorec2.getY().getRowDimension();
+		int width = colorTransform_stvorec2.getY().getColumnDimension();
+		
+		double pred;
+		double po;
+		double rozdiel;
+		double percenta;
+		
+		pred = Functions.SAD(Functions.DPCM(colorTransform_stvorec2.getY(), colorTransform_stvorec1.getY()), colorTransform_stvorec1.getY());
+		po = Functions.SAD(Functions.DPCM(Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getY(), macroblock_size), colorTransform_stvorec1.getY()), colorTransform_stvorec1.getY());
+		
+		rozdiel = Functions.SAD(colorTransform_stvorec2.getY(), Functions.FULL_search_i(Functions.FULL_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), colorTransform_stvorec1.getY(), macroblock_size));
+		
+		percenta = ((rozdiel / (height * width)) / 256) * 100;
+		String result = String.format(" = cca: %.2f percenta na pixel", percenta);
+		
+		sad_label1.setText("Pred: " + (int)pred);
+		sad_label2.setText("Po: " + (int)po);
+		
+		sad_label3.setText("Dif: " + (int)rozdiel + result);
+		
+	}
 
 }

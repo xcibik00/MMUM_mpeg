@@ -34,6 +34,8 @@ public class Process implements Initializable {
 
 	private ImagePlus imagePlus;
 	private ColorTransform colorTransform;
+	private ColorTransform colorTransform_stvorec1;
+	private ColorTransform colorTransform_stvorec2;
 	private ColorTransform colorTransformOrig;
 
 	@FXML
@@ -71,6 +73,8 @@ public class Process implements Initializable {
 	private RadioButton radioButtonWHT;
 	final ToggleGroup transformTypeGroup = new ToggleGroup();
 	private RadioButton selectedTransformRadioButton;
+	private ImagePlus imagePlus_stvorcek1;
+	private ImagePlus imagePlus_stvorcek2;
 
 
 
@@ -96,6 +100,16 @@ public class Process implements Initializable {
 		radioButtonDCT.setToggleGroup(transformTypeGroup);
 		radioButtonWHT.setToggleGroup(transformTypeGroup);
 
+		nactiOrigObraz_stvorceky();
+		this.colorTransform_stvorec1.convertRgbToYcbcr();
+		imagePlus_stvorcek1.setTitle("Stvorec 1");
+		imagePlus_stvorcek1.show("Stvorec 1");
+		
+		this.colorTransform_stvorec2.convertRgbToYcbcr();
+		imagePlus_stvorcek2.setTitle("Stvorec 2");
+		imagePlus_stvorcek2.show("Stvorec 2");
+		
+		
 		nactiOrigObraz();
 		this.colorTransform.convertRgbToYcbcr();
 		imagePlus.setTitle("Original Image");
@@ -110,6 +124,17 @@ public class Process implements Initializable {
 		this.colorTransform = new ColorTransform(imagePlus.getBufferedImage());
 		this.colorTransform.getRGB();
 		colorTransformOrig.getRGB();
+	}
+	
+	public void nactiOrigObraz_stvorceky() {
+		
+		this.imagePlus_stvorcek1 = new ImagePlus("img/test1.jpg");
+		this.colorTransform_stvorec1 = new ColorTransform(imagePlus_stvorcek1.getBufferedImage());
+		this.colorTransform_stvorec1.getRGB();
+		
+		this.imagePlus_stvorcek2 = new ImagePlus("img/test2.jpg");
+		this.colorTransform_stvorec2 = new ColorTransform(imagePlus_stvorcek2.getBufferedImage());
+		this.colorTransform_stvorec2.getRGB();
 	}
 
 	public ImagePlus getComponent(int component) {
@@ -342,6 +367,7 @@ public class Process implements Initializable {
 
 
 
+
 	/*public void kvantuj(ActionEvent event) {
 		this.quantizationMatrix8Y = new Matrix(
 				colorTransform.getQuantizationMatrix8Y());
@@ -561,6 +587,17 @@ public class Process implements Initializable {
 	}
 
 
+	public void DPCM_1(ActionEvent event) {
+		colorTransform.setY(Functions.DPCM(colorTransform_stvorec2.getY(), colorTransform_stvorec1.getY()));
+		getComponent(Y).show();
+		colorTransform.setcB(Functions.DPCM(colorTransform_stvorec2.getcB(), colorTransform_stvorec1.getcB()));
+		getComponent(CB).show();
+		colorTransform.setcR(Functions.DPCM(colorTransform_stvorec2.getcR(), colorTransform_stvorec1.getcR()));
+		getComponent(CR).show();
+		
+	}
+	
+	
 
 
 }

@@ -9,7 +9,7 @@ První obrázek bude kódován jako snímek I (bez predikce), druhý obrázek bu
 * Převod RGB na YCbCr + zobrazení složek Y, Cb, Cr obou obrázků
 * Vzorkování bude ponecháno původní 4:4:4 - DCT po blocích 8x8
 * Kvantizace shodná s JPEG kodérem
-* DPCM (chyba predikce) - mezi snímky 2 a 1 bez odhadu a kompenzace pohybu + zobrazení chyby predikce složek Y, Cb, Cr. **(1b)**
+* DPCM (chyba predikce) - mezi snímky 2 a 1 bez odhadu a kompenzace pohybu + zobrazení chyby predikce složek Y, Cb, Cr. <span style="color:red">**(1b)**</span>
 * Odhad pohybu metodou Full-Search (prováděno na Y složce) + kompenzace pohybu pro složky Y, Cb, Cr: ke kompenzaci budou požity vektory složky Y + zobrazení odhadnutých složek Y, Cb, Cr obou obrázků **(4b)**
 * DPCM (chyba predikce) - mezi snímky 2 a 1 po odhadu a kompenzaci pohybu + zobrazení chyby predikce složek Y, Cb, Cr. **(1b)**
 * Výpočet SAD (Sum of Absolute Difference) - chyba bez predikce vs. chyba s predikcí **(1b)**

@@ -125,11 +125,11 @@ public static Matrix upsize_matrix (int size, Matrix input_matrix) {
 		return tmp;
 	}
 	
-	public static Matrix DPCM(Matrix input_matrix_a, Matrix input_matrix_b) {
+	public static Matrix DPCM(Matrix input_matrix_a, Matrix input_matrix_2) {
 		int height = input_matrix_a.getRowDimension();
 		int width = input_matrix_a.getColumnDimension();
 		
-		System.out.println("DPCM:");
+//		System.out.println("DPCM:");
 		
 		Matrix tmp_matrix = new Matrix(height, width);
 		
@@ -137,27 +137,27 @@ public static Matrix upsize_matrix (int size, Matrix input_matrix) {
 		
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				tmp_value = (((input_matrix_b.get(i, j) + 255) - input_matrix_a.get(i, j)) / 2);
+				tmp_value = (((input_matrix_2.get(i, j) + 255) - input_matrix_a.get(i, j)) / 2);
 				tmp_matrix.set(i, j, tmp_value); 
-				System.out.print(tmp_value + " ");
+//				System.out.print(tmp_value + " ");
 				
 			}
-			System.out.println();
+//			System.out.println();
 		}
 		return tmp_matrix;
 	}
 	
-public static LinkedList<int[]> FULL_search (Matrix input_matrix_a, Matrix input_matrix_b, int macroblok_size) {
+public static LinkedList<int[]> FULL_search_vectors (Matrix input_matrix_1, Matrix input_matrix_2, int macroblok_size) {
 		
-		int height = input_matrix_a.getRowDimension();
-		int width = input_matrix_a.getColumnDimension();
+		int height = input_matrix_2.getRowDimension();
+		int width = input_matrix_2.getColumnDimension();
 		
 		int start_height;
 		int start_width;
 		
 		LinkedList<int[]> tmp_list = new LinkedList<int[]>();
 		
-		Matrix upsized_matrix_a = upsize_matrix((macroblok_size / 2), input_matrix_a);
+		Matrix upsized_matrix_a = upsize_matrix((macroblok_size / 2), input_matrix_1);
 		
 		Matrix macroblok;
 		
@@ -173,7 +173,7 @@ public static LinkedList<int[]> FULL_search (Matrix input_matrix_a, Matrix input
 				
 				tmp_SAD = 100000.0;
 				
-				macroblok = input_matrix_b.getMatrix((i * macroblok_size), (((i + 1) * macroblok_size) - 1), (j * macroblok_size), (((j + 1) * macroblok_size) - 1));
+				macroblok = input_matrix_2.getMatrix((i * macroblok_size), (((i + 1) * macroblok_size) - 1), (j * macroblok_size), (((j + 1) * macroblok_size) - 1));
 				
 				start_height = i * macroblok_size;
 				start_width = j * macroblok_size;
@@ -192,22 +192,36 @@ public static LinkedList<int[]> FULL_search (Matrix input_matrix_a, Matrix input
 					}
 				}
 				
-				System.out.print("( " + height_v + " , " + width_v + " ) ; ");
+//				System.out.print("( " + height_v + " , " + width_v + " ) ; ");
 				tmp_list.add(new int[] {height_v, width_v});
 				
 			}
 			
-			System.out.println();
+//			System.out.println();
 			
 		}
 		
 		return tmp_list;
 	}
 
-	public static Matrix FULL_search_i(LinkedList<int[]> vectors, Matrix input_matrix_b, int macroblok_size) {
+	public static Matrix Full_search_chyba (LinkedList<int[]> vectors, Matrix input_matrix_1, int macroblok_size, Matrix input_matrix_2) {
 		
-		int height = input_matrix_b.getRowDimension();
-		int width = input_matrix_b.getColumnDimension();
+		int height = input_matrix_2.getRowDimension();
+		int width = input_matrix_2.getColumnDimension();
+		
+		Matrix tmp_matrix = new Matrix(height, width);
+		
+		Matrix matrix_2_obnovena = FULL_search_i(vectors, input_matrix_1, macroblok_size);
+		
+		tmp_matrix = input_matrix_2.minus(matrix_2_obnovena);
+		
+		return tmp_matrix;
+	}
+
+	public static Matrix FULL_search_i(LinkedList<int[]> vectors, Matrix input_matrix_1, int macroblok_size) {
+		
+		int height = input_matrix_1.getRowDimension();
+		int width = input_matrix_1.getColumnDimension();
 		
 		int height_v;
 		int width_v;
@@ -227,7 +241,7 @@ public static LinkedList<int[]> FULL_search (Matrix input_matrix_a, Matrix input
 				height_v = tmp_pole[0];
 				width_v	= tmp_pole[1];
 				
-				upsized_matrix_b = upsize_matrix((macroblok_size / 2), input_matrix_b);
+				upsized_matrix_b = upsize_matrix((macroblok_size / 2), input_matrix_1);
 				
 				macroblok = upsized_matrix_b.getMatrix(height_v, ((height_v + macroblok_size) - 1), width_v, ((width_v + macroblok_size) - 1));
 				
@@ -238,6 +252,19 @@ public static LinkedList<int[]> FULL_search (Matrix input_matrix_a, Matrix input
 		
 		return tmp_matrix;
 		
-	} 
+	}
+	
+	
+	public static Matrix Full_search_chyba_i(Matrix matrix_2_obnovena, Matrix chyba) {
+		
+		int height = matrix_2_obnovena.getRowDimension();
+		int width = matrix_2_obnovena.getColumnDimension();
+		
+		Matrix tmp_matrix = new Matrix(height, width);
+		
+		tmp_matrix = matrix_2_obnovena.plus(chyba);
+		
+		return tmp_matrix;
+	}
 	
 }

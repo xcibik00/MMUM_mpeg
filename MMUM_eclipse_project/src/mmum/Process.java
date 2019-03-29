@@ -130,7 +130,7 @@ public class Process implements Initializable {
 		nactiOrigObraz();
 		this.colorTransform.convertRgbToYcbcr();
 		imagePlus.setTitle("Original Image");
-		imagePlus.show("Original Image");
+//		imagePlus.show("Original Image");
 		
 		choice_box_n.setItems(FXCollections.observableArrayList("2 x 2", "4 x 4", "8 x 8", "16 x 16"));
 		choice_box_n.getSelectionModel().select(3);
@@ -699,61 +699,41 @@ public class Process implements Initializable {
 	public void DPCM_2(ActionEvent event) {
 		
 		colorTransform.setY(
-								Functions.DPCM(
-												Functions.Full_search_chyba_i(
-													Functions.FULL_search_i(
-															Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
-															colorTransform_stvorec1.getY(), 
-															macroblock_size
-													), 
-													Functions.Full_search_chyba(Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
-														colorTransform_stvorec1.getY(),
-														macroblock_size, 
-														colorTransform_stvorec2.getY()
-													)
-												), 
-												colorTransform_stvorec1.getY()
-											  	)
-							);
+				Functions.DPCM(
+					Functions.FULL_search_i(
+							Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+							colorTransform_stvorec1.getY(), 
+							macroblock_size
+					),
+					colorTransform_stvorec2.getY()
+				)
+				);
+		
 		getComponent(Y).show();
 		
 		colorTransform.setcB(
 								Functions.DPCM(
-												Functions.Full_search_chyba_i(
-													Functions.FULL_search_i(
-															Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
-															colorTransform_stvorec1.getcB(), 
-															macroblock_size
-													), 
-													Functions.Full_search_chyba(Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
-														colorTransform_stvorec1.getcB(),
-														macroblock_size, 
-														colorTransform_stvorec2.getcB()
-													)
-												), 
-												colorTransform_stvorec1.getcB()
-												)
-							);
+										Functions.FULL_search_i(
+												Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+												colorTransform_stvorec1.getcB(), 
+												macroblock_size
+										),
+										colorTransform_stvorec2.getcB()
+									)
+									);
 		
 		getComponent(CB).show();
 		
 		colorTransform.setcR(
-								Functions.DPCM(
-												Functions.Full_search_chyba_i(
-													Functions.FULL_search_i(
-															Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
-															colorTransform_stvorec1.getcR(), 
-															macroblock_size
-													), 
-													Functions.Full_search_chyba(Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
-														colorTransform_stvorec1.getcR(),
-														macroblock_size, 
-														colorTransform_stvorec2.getcR()
-													)
-												), 
-												colorTransform_stvorec1.getcR()
-												)
-							);
+				Functions.DPCM(
+						Functions.FULL_search_i(
+								Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+								colorTransform_stvorec1.getcR(), 
+								macroblock_size
+						),
+						colorTransform_stvorec2.getcR()
+					)
+					);
 		
 		getComponent(CR).show();
 		
@@ -769,49 +749,22 @@ public class Process implements Initializable {
 		double rozdiel;
 		double percenta;
 		
-		pred = Functions.SAD(Functions.DPCM(colorTransform_stvorec2.getY(), colorTransform_stvorec1.getY()), colorTransform_stvorec1.getY());
+		pred = Functions.SAD(colorTransform_stvorec2.getY(), colorTransform_stvorec1.getY());
 		
 		po = Functions.SAD( 
-							Functions.DPCM(
-								Functions.Full_search_chyba_i(
-										Functions.FULL_search_i(
-												Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
-												colorTransform_stvorec1.getY(), 
-												macroblock_size
-										), 
-										Functions.Full_search_chyba(Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
-											colorTransform_stvorec1.getY(),
-											macroblock_size, 
-											colorTransform_stvorec2.getY()
-										)
-									), 
-								colorTransform_stvorec1.getY()
-							  ), 
+								Functions.FULL_search_i(
+										Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+										colorTransform_stvorec1.getY(), 
+										macroblock_size
+								), 
 							colorTransform_stvorec1.getY()
 							);
-		
-		rozdiel = Functions.SAD(	
-									colorTransform_stvorec2.getY(), 
-									Functions.Full_search_chyba_i(
-										Functions.FULL_search_i(
-												Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
-												colorTransform_stvorec1.getY(), 
-												macroblock_size
-										), 
-										Functions.Full_search_chyba(Functions.FULL_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
-											colorTransform_stvorec1.getY(),
-											macroblock_size, 
-											colorTransform_stvorec2.getY())
-									)
-								);
-		
-		percenta = ((rozdiel / (height * width)) / 256) * 100;
-		String result = String.format(" = cca: %.2f percenta na pixel", percenta);
+		rozdiel = Math.abs(pred - po);
 		
 		sad_label1.setText("Pred: " + (int)pred);
 		sad_label2.setText("Po: " + (int)po);
 		
-		sad_label3.setText("Dif: " + rozdiel + result);
+		sad_label3.setText("Dif: " + (int)rozdiel);
 		
 	}
 

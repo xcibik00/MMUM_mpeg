@@ -125,9 +125,9 @@ public static Matrix upsize_matrix (int size, Matrix input_matrix) {
 		return tmp;
 	}
 	
-	public static Matrix DPCM(Matrix input_matrix_a, Matrix input_matrix_2) {
-		int height = input_matrix_a.getRowDimension();
-		int width = input_matrix_a.getColumnDimension();
+	public static Matrix DPCM(Matrix input_matrix_1, Matrix input_matrix_2) {
+		int height = input_matrix_1.getRowDimension();
+		int width = input_matrix_1.getColumnDimension();
 		
 //		System.out.println("DPCM:");
 		
@@ -137,7 +137,7 @@ public static Matrix upsize_matrix (int size, Matrix input_matrix) {
 		
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				tmp_value = (((input_matrix_2.get(i, j) + 255) - input_matrix_a.get(i, j)) / 2);
+				tmp_value = (((input_matrix_2.get(i, j) + 255) - input_matrix_1.get(i, j)) / 2);
 				tmp_matrix.set(i, j, tmp_value); 
 //				System.out.print(tmp_value + " ");
 				

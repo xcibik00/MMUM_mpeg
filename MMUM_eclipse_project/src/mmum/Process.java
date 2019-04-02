@@ -738,6 +738,60 @@ public class Process implements Initializable {
 		getComponent(CR).show();
 		
 	}
+	
+	public void threeStepSearch(ActionEvent event) {
+	
+		colorTransform.setY(
+				Functions.Full_search_chyba_i(
+					Functions.FULL_search_i(
+							Functions.N_step_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size, 3), 
+							colorTransform_stvorec1.getY(), 
+							macroblock_size
+					), 
+					Functions.Full_search_chyba(Functions.N_step_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size, 3),
+						colorTransform_stvorec1.getY(),
+						macroblock_size, 
+						colorTransform_stvorec2.getY())
+				)		
+			);
+
+		getComponent(Y).show();
+		
+		colorTransform.setcB(
+						Functions.Full_search_chyba_i(
+							Functions.FULL_search_i(
+									Functions.N_step_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size, 3), 
+									colorTransform_stvorec1.getcB(), 
+									macroblock_size
+							), 
+							Functions.Full_search_chyba(Functions.N_step_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size, 3),
+								colorTransform_stvorec1.getcB(),
+								macroblock_size, 
+								colorTransform_stvorec2.getcB())
+						)		
+					);
+		
+		getComponent(CB).show();
+		
+		colorTransform.setcR(
+						Functions.Full_search_chyba_i(
+							Functions.FULL_search_i(
+									Functions.N_step_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size, 3), 
+									colorTransform_stvorec1.getcR(), 
+									macroblock_size
+							), 
+							Functions.Full_search_chyba(Functions.N_step_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size, 3),
+								colorTransform_stvorec1.getcR(),
+								macroblock_size, 
+								colorTransform_stvorec2.getcR())
+						)		
+					);
+		
+		getComponent(CR).show();
+		
+		showResult();
+		
+	}
 
 	public void SAD_pred_po(ActionEvent event) {
 		

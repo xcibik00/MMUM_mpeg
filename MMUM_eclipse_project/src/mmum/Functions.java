@@ -267,4 +267,89 @@ public static LinkedList<int[]> FULL_search_vectors (Matrix input_matrix_1, Matr
 		return tmp_matrix;
 	}
 	
+public static LinkedList<int[]> N_step_search_vectors (Matrix input_matrix_1, Matrix input_matrix_2, int macroblok_size, int n) {
+		
+		int height = input_matrix_2.getRowDimension();
+		int width = input_matrix_2.getColumnDimension();
+		
+		int step = (int) Math.pow(2,(n - 1));
+
+		int start_height = macroblok_size - (macroblok_size / 2) - step;
+		int start_width = macroblok_size - (macroblok_size / 2) - step;
+		
+		LinkedList<int[]> tmp_list = new LinkedList<int[]>();
+		
+		Matrix upsized_matrix_a = upsize_matrix((macroblok_size / 2), input_matrix_1);
+		
+		Matrix macroblok;
+		
+		int tmp_height;
+		int tmp_width;
+
+		double tmp_SAD;
+		double tmp_SAD_block = 0;
+		
+		int height_v = 0;
+		int width_v = 0;
+		
+		for (int i = 0; i < (height / macroblok_size); i++) {
+			
+			for (int j = 0; j < (width / macroblok_size); j++) {
+				
+				tmp_SAD = 100000.0;
+				
+				macroblok = input_matrix_2.getMatrix((i * macroblok_size), (((i + 1) * macroblok_size) - 1), (j * macroblok_size), (((j + 1) * macroblok_size) - 1));
+				
+				start_height = (i + 1) * macroblok_size;
+				start_width = (j + 1) * macroblok_size;
+
+				for (int m = 0; m < n; m++){
+
+					tmp_height = start_height - (macroblok_size / 2);
+					tmp_width = start_width - (macroblok_size / 2);
+
+					tmp_SAD_block = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height, ((tmp_height + macroblok_size) - 1), tmp_width, (tmp_width + macroblok_size) - 1));
+					
+					if(tmp_SAD > tmp_SAD_block) {
+						tmp_SAD = tmp_SAD_block;
+						height_v = tmp_height;
+						width_v = tmp_width;
+					}
+
+					for (int k = 0; k < 3; k++){
+						for (int l = 0; l < 3; l++){
+
+							tmp_height = (((k * step) + start_height) - step) - (macroblok_size / 2);  
+							tmp_width = (((l * step) + start_height) - step) - (macroblok_size / 2);
+
+							tmp_SAD_block = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height, ((tmp_height + macroblok_size) - 1), tmp_width, (tmp_width + macroblok_size) - 1));
+
+							if(tmp_SAD > tmp_SAD_block) {
+								tmp_SAD = tmp_SAD_block;
+								height_v = tmp_height;
+								width_v = tmp_width;
+							}
+						}
+					}
+
+					step = step / 2;
+
+					start_height = height_v + (macroblok_size / 2);
+					start_width = tmp_width + (macroblok_size / 2);
+
+				}
+				
+//				System.out.print("( " + height_v + " , " + width_v + " ) ; ");
+				tmp_list.add(new int[] {height_v, width_v});
+				
+			}
+			
+//			System.out.println();
+			
+		}
+		
+		return tmp_list;
+	}
+	
+	
 }

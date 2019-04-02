@@ -26,6 +26,6 @@ První obrázek bude kódován jako snímek I (bez predikce), druhý obrázek bu
 * Vyhledávací oblast bude volitelná (vždy dvojnásobná oproti zadané velikosti vyhledávaného bloku. Blok pro vyhledávání bude volitelný (2x2, 4x4, 8x8, 16x16). **(3b)** :white_check_mark:
 ## 2. Část: volitelná
 ### Implementujte níže uvedené metody a proveďte porovnání s metodou Full Search.
-* V kodéru i dekodéru implementujte odhad pohybu metodou Three step Search za stejných podmínek, jako tomu bylo u předchozího. **(2b)**
+* V kodéru i dekodéru implementujte odhad pohybu metodou Three step Search za stejných podmínek, jako tomu bylo u předchozího. **(2b)** :white_check_mark:
 * V kodéru i dekodéru implementujte odhad pohybu metodou One-at-time search za stejných podmínek, jako tomu bylo u předchozího. **(2b)**
 * Implementujte vyhledávání s půl-pixelovou přesností pohybu. **(4b)**

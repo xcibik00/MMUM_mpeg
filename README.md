@@ -27,5 +27,5 @@ První obrázek bude kódován jako snímek I (bez predikce), druhý obrázek bu
 ## 2. Část: volitelná
 ### Implementujte níže uvedené metody a proveďte porovnání s metodou Full Search.
 * V kodéru i dekodéru implementujte odhad pohybu metodou Three step Search za stejných podmínek, jako tomu bylo u předchozího. **(2b)** :white_check_mark:
-* V kodéru i dekodéru implementujte odhad pohybu metodou One-at-time search za stejných podmínek, jako tomu bylo u předchozího. **(2b)**
+* V kodéru i dekodéru implementujte odhad pohybu metodou One-at-time search za stejných podmínek, jako tomu bylo u předchozího. **(2b)** :white_check_mark:
 * Implementujte vyhledávání s půl-pixelovou přesností pohybu. **(4b)**

@@ -792,6 +792,60 @@ public class Process implements Initializable {
 		showResult();
 		
 	}
+	
+	public void oneattime(ActionEvent event) {
+		
+		colorTransform.setY(
+				Functions.Full_search_chyba_i(
+					Functions.FULL_search_i(
+							Functions.one_at_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+							colorTransform_stvorec1.getY(), 
+							macroblock_size
+					), 
+					Functions.Full_search_chyba(Functions.one_at_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
+						colorTransform_stvorec1.getY(),
+						macroblock_size, 
+						colorTransform_stvorec2.getY())
+				)		
+			);
+
+		getComponent(Y).show();
+		
+		colorTransform.setcB(
+						Functions.Full_search_chyba_i(
+							Functions.FULL_search_i(
+									Functions.one_at_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+									colorTransform_stvorec1.getcB(), 
+									macroblock_size
+							), 
+							Functions.Full_search_chyba(Functions.one_at_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
+								colorTransform_stvorec1.getcB(),
+								macroblock_size, 
+								colorTransform_stvorec2.getcB())
+						)		
+					);
+		
+		getComponent(CB).show();
+		
+		colorTransform.setcR(
+						Functions.Full_search_chyba_i(
+							Functions.FULL_search_i(
+									Functions.one_at_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+									colorTransform_stvorec1.getcR(), 
+									macroblock_size
+							), 
+							Functions.Full_search_chyba(Functions.one_at_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size),
+								colorTransform_stvorec1.getcR(),
+								macroblock_size, 
+								colorTransform_stvorec2.getcR())
+						)		
+					);
+		
+		getComponent(CR).show();
+		
+		showResult();
+		
+	}
 
 	public void SAD_pred_po(ActionEvent event) {
 		

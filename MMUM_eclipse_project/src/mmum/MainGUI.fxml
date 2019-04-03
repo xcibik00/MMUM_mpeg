@@ -75,5 +75,6 @@
       <ChoiceBox fx:id="choice_box_n" layoutX="498.0" layoutY="311.0" prefWidth="150.0" />
       <Label fx:id="sad_label3" layoutX="367.0" layoutY="457.0" prefHeight="21.0" prefWidth="287.0" text="Dif: " />
       <Button layoutX="377.0" layoutY="495.0" mnemonicParsing="false" onAction="#threeStepSearch" text="ThreeStepSearch" />
+      <Button layoutX="376.0" layoutY="537.0" mnemonicParsing="false" onAction="#oneattime" text="OneAtTime" />
   </children>
 </AnchorPane>

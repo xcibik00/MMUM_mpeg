@@ -274,8 +274,8 @@ public static LinkedList<int[]> N_step_search_vectors (Matrix input_matrix_1, Ma
 		
 		int step = (int) Math.pow(2,(n - 1));
 
-		int start_height = macroblok_size - (macroblok_size / 2) - step;
-		int start_width = macroblok_size - (macroblok_size / 2) - step;
+		int start_height;
+		int start_width;
 		
 		LinkedList<int[]> tmp_list = new LinkedList<int[]>();
 		
@@ -351,5 +351,117 @@ public static LinkedList<int[]> N_step_search_vectors (Matrix input_matrix_1, Ma
 		return tmp_list;
 	}
 	
+	public static LinkedList<int[]> one_at_search (Matrix input_matrix_1, Matrix input_matrix_2, int macroblok_size) {
+		
+		int height = input_matrix_2.getRowDimension();
+		int width = input_matrix_2.getColumnDimension();
+		
+		int start_height;
+		int start_width;
+		
+		LinkedList<int[]> tmp_list = new LinkedList<int[]>();
+		
+		Matrix upsized_matrix_a = upsize_matrix((macroblok_size / 2), input_matrix_1);
+		
+		Matrix macroblok;
+	
+		double tmp_SAD_l;
+		double tmp_SAD_r;
+		double tmp_SAD_block = 0;
+		
+		int tmp_height;
+		int tmp_width;
+		
+		int height_v = 0;
+		int width_v = 0;
+		
+		
+		int tmp_l = 0;
+		int tmp_r = 0;
+		
+		for (int i = 0; i < (height / macroblok_size); i++) {
+			
+			for (int j = 0; j < (width / macroblok_size); j++) {
+				
+				macroblok = input_matrix_2.getMatrix((i * macroblok_size), (((i + 1) * macroblok_size) - 1), (j * macroblok_size), (((j + 1) * macroblok_size) - 1));
+				
+				
+				start_height = (i + 1) * macroblok_size;
+				start_width = (j + 1) * macroblok_size;
+				
+				tmp_l = 0;
+				tmp_r = 0;
+				
+				while(true) {
+					
+					tmp_height = start_height - (macroblok_size / 2);
+					tmp_width = start_width - (macroblok_size / 2);
+					
+					tmp_SAD_block = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height, ((tmp_height + macroblok_size) - 1), tmp_width, (tmp_width + macroblok_size) - 1));
+					tmp_SAD_l = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height, ((tmp_height + macroblok_size) - 1), tmp_width - 1, (tmp_width + macroblok_size) - 2));
+					tmp_SAD_r = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height, ((tmp_height + macroblok_size) - 1), tmp_width + 1, (tmp_width + macroblok_size)));
+					
+					if (tmp_SAD_block <= tmp_SAD_l && tmp_SAD_block <= tmp_SAD_r) {
+						break;
+					} else if(tmp_SAD_l <= tmp_SAD_r) {
+						start_width--;
+						tmp_l++;
+					} else {
+						start_width++;
+						tmp_r++;
+					}
+					
+					if(tmp_l == 7 || tmp_r == 7) {
+						break;
+					}
+				}
+				
+				tmp_l = 0;
+				tmp_r = 0;
+				
+				while(true) {
+					
+					tmp_height = start_height - (macroblok_size / 2);
+					tmp_width = start_width - (macroblok_size / 2);
+					
+					tmp_SAD_block = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height, ((tmp_height + macroblok_size) - 1), tmp_width, (tmp_width + macroblok_size) - 1));
+					tmp_SAD_l = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height - 1, ((tmp_height + macroblok_size) - 2), tmp_width, (tmp_width + macroblok_size) - 1));
+					tmp_SAD_r = SAD(macroblok, upsized_matrix_a.getMatrix(tmp_height + 1, ((tmp_height + macroblok_size)), tmp_width, (tmp_width + macroblok_size) - 1));
+					
+					if (tmp_SAD_block <= tmp_SAD_l && tmp_SAD_block <= tmp_SAD_r) {
+						break;
+					} else if(tmp_SAD_l <= tmp_SAD_r) {
+						start_height--;
+						tmp_l++;
+					} else {
+						start_height++;
+						tmp_r++;
+					}
+					
+					if(tmp_l == 7 || tmp_r == 7) {
+						break;
+					}
+				}
+				
+				
+				
+				height_v = start_height - (macroblok_size / 2);
+				width_v = start_width - (macroblok_size / 2);
+				
+//				System.out.print("( " + height_v + " , " + width_v + " ) ; ");
+				tmp_list.add(new int[] {height_v, width_v});
+				
+			}
+			
+//			System.out.println();
+			
+		}
+		
+		return tmp_list;
+	}
+
+
+
+
 	
 }

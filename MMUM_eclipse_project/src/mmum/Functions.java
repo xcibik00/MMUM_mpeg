@@ -389,8 +389,8 @@ public static LinkedList<int[]> N_step_search_vectors (Matrix input_matrix_1, Ma
 				start_height = (i + 1) * macroblok_size;
 				start_width = (j + 1) * macroblok_size;
 				
-				tmp_l = 0;
-				tmp_r = 0;
+				tmp_l = 1;
+				tmp_r = 1;
 				
 				while(true) {
 					
@@ -411,13 +411,13 @@ public static LinkedList<int[]> N_step_search_vectors (Matrix input_matrix_1, Ma
 						tmp_r++;
 					}
 					
-					if(tmp_l == 7 || tmp_r == 7) {
+					if(tmp_l == (macroblok_size/2) || tmp_r == (macroblok_size/2)) {
 						break;
 					}
 				}
 				
-				tmp_l = 0;
-				tmp_r = 0;
+				tmp_l = 1;
+				tmp_r = 1;
 				
 				while(true) {
 					
@@ -438,7 +438,7 @@ public static LinkedList<int[]> N_step_search_vectors (Matrix input_matrix_1, Ma
 						tmp_r++;
 					}
 					
-					if(tmp_l == 7 || tmp_r == 7) {
+					if(tmp_l == (macroblok_size/2) || tmp_r == (macroblok_size/2)) {
 						break;
 					}
 				}

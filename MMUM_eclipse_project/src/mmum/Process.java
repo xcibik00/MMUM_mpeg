@@ -854,6 +854,8 @@ public class Process implements Initializable {
 		
 		double pred;
 		double po;
+		double po3step;
+		double poone;
 		double rozdiel;
 		double percenta;
 		
@@ -865,12 +867,31 @@ public class Process implements Initializable {
 										colorTransform_stvorec1.getY(), 
 										macroblock_size
 								), 
-							colorTransform_stvorec1.getY()
+							colorTransform_stvorec2.getY()
 							);
+		
+		po3step = Functions.SAD( 
+				Functions.FULL_search_i(
+						Functions.N_step_search_vectors(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size, 3), 
+						colorTransform_stvorec2.getY(), 
+						macroblock_size
+				), 
+			colorTransform_stvorec1.getY()
+			);
+				
+		poone = Functions.SAD( 
+				Functions.FULL_search_i(
+						Functions.one_at_search(colorTransform_stvorec1.getY(), colorTransform_stvorec2.getY(), macroblock_size), 
+						colorTransform_stvorec1.getY(), 
+						macroblock_size
+				), 
+			colorTransform_stvorec2.getY()
+			);
+		
 		rozdiel = Math.abs(pred - po);
 		
 		sad_label1.setText("Pred: " + (int)pred);
-		sad_label2.setText("Po: " + (int)po);
+		sad_label2.setText("Po: " + (int)po + ";3: "+ (int)po3step + "; 1: " + (int)poone);
 		
 		sad_label3.setText("Dif: " + (int)rozdiel);
 		
